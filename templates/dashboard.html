@@ -8,13 +8,24 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <header>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <img src="{{ url_for('static', filename='images/user-avatar.png') }}" alt="User Avatar">
+        <h2>{{ session['username'] }}</h2> <!-- Display the logged-in user's name -->
+        <p>Your Money</p>
         <nav>
             <ul>
-                <li><a href="{{ url_for('home') }}">Logout</a></li>
+                <li><a href="{{ url_for('dashboard') }}"><i class="icon-dashboard"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('view_transactions') }}"><i class="icon-transactions"></i> View Transactions</a></li>
+                <li><a href="{{ url_for('add_income') }}"><i class="icon-income"></i> Incomes</a></li>
+                <li><a href="{{ url_for('add_expense') }}"><i class="icon-expense"></i> Expenses</a></li>
             </ul>
         </nav>
-    </header>
+        <!-- Logout Button -->
+        <a href="{{ url_for('home') }}" class="logout-button">Logout</a>
+    </div>
+
+    <!-- Main Content -->
     <main>
         <h2>Dashboard</h2>
         <div class="overview">
@@ -32,15 +43,15 @@
             </div>
         </div>
 
-        <!-- New Links Section -->
-        <div class="actions">
-            <h3>Quick Actions</h3>
-            <ul>
-                <li><a href="{{ url_for('view_transactions') }}">View Transactions</a></li>
-                <li><a href="{{ url_for('add_expense') }}">Add Expense</a></li>
-                <li><a href="{{ url_for('add_income') }}">Add Income</a></li>
-            </ul>
-        </div>
+								  
+							 
+								  
+				
+																						   
+																			   
+																			 
+				 
+			  
 
         <h3>Recent Transactions</h3>
         <table>

@@ -146,5 +146,64 @@ def reset_password(username):
 
     return render_template('reset_password.html', username=username)
 
+@app.route('/view_transactions')
+def view_transactions():
+    if 'user_id' not in session:
+        return redirect(url_for('home'))
+
+    conn = get_db_connection()
+    transactions = conn.execute("SELECT * FROM transactions WHERE user_id = ? ORDER BY date DESC", (session['user_id'],)).fetchall()
+    conn.close()
+
+    return render_template('view_transactions.html', transactions=transactions)
+
+@app.route('/add_expense', methods=['GET', 'POST'])
+def add_expense():
+    if 'user_id' not in session:
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        amount = request.form['amount']
+        category = request.form['category']
+        description = request.form['description']
+        user_id = session['user_id']
+
+        # Insert the expense into the database
+        conn = get_db_connection()
+        conn.execute("INSERT INTO transactions (user_id, type, category, amount, date, description) VALUES (?, 'expense', ?, ?, datetime('now'), ?)",
+                     (user_id, category, amount, description))
+        conn.commit()
+        conn.close()
+
+        # Redirect to the dashboard or a success page
+        return redirect(url_for('dashboard'))
+
+    return render_template('add_expense.html')
+
+@app.route('/add_income', methods=['GET', 'POST'])
+def add_income():
+    if 'user_id' not in session:
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        amount = request.form['amount']
+        category = request.form['category']
+        description = request.form['description']
+        user_id = session['user_id']
+
+        # Insert the income into the database
+        conn = get_db_connection()
+        conn.execute("INSERT INTO transactions (user_id, type, category, amount, date, description) VALUES (?, 'income', ?, ?, datetime('now'), ?)",
+                     (user_id, category, amount, description))
+        conn.commit()
+        conn.close()
+
+        # Redirect to the dashboard or a success page
+        return redirect(url_for('dashboard'))
+
+    return render_template('add_income.html')
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

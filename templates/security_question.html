@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Question</title>
+</head>
+<body>
+    <h2>Security Question</h2>
+    <p>Answer the security question to reset your password:</p>
+    
+    <!-- Display the security question -->
+    <p><strong>{{ security_question }}</strong></p>
+    
+    <form action="{{ url_for('security_question', username=username) }}" method="POST">
+        <label for="security_answer">Your Answer:</label>
+        <input type="text" id="security_answer" name="security_answer" required>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

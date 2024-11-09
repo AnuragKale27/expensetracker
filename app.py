@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from datetime import datetime
@@ -12,6 +12,8 @@ from flask import make_response
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+
+
 
 # Database connection
 def get_db_connection():
@@ -80,6 +82,69 @@ def dashboard():
     conn.close()
 
     return render_template('dashboard.html', transactions=transactions, total_income=total_income, total_expense=total_expense, total_balance=total_balance)
+
+
+
+
+    # Forgot Password Route
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        username = request.form['username']
+        
+        conn = get_db_connection()
+        user = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+        conn.close()
+
+        if user:
+            # Redirect to a route where the user can answer their security question
+            return redirect(url_for('security_question', username=username))
+        else:
+            flash("Username not found. Please try again.")
+            return redirect(url_for('forgot_password'))
+
+    return render_template('forgot_password.html')
+
+# Security Question Route
+@app.route('/security_question/<username>', methods=['GET', 'POST'])
+def security_question(username):
+    conn = get_db_connection()
+    user = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+    conn.close()
+
+    if not user:
+        flash("User not found. Please try again.")
+        return redirect(url_for('forgot_password'))
+
+    if request.method == 'POST':
+        answer = request.form['security_answer']
+        if user['security_answer'].lower() == answer.lower():
+            # Redirect to reset password page if the answer is correct
+            return redirect(url_for('reset_password', username=username))
+        else:
+            flash("Incorrect answer. Please try again.")
+            return redirect(url_for('security_question', username=username))
+
+    # Pass the security question to the template
+    return render_template('security_question.html', username=username, security_question=user['security_question'])
+
+
+# Reset Password Route
+@app.route('/reset_password/<username>', methods=['GET', 'POST'])
+def reset_password(username):
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+        hashed_password = generate_password_hash(new_password)
+        
+        conn = get_db_connection()
+        conn.execute("UPDATE users SET password = ? WHERE username = ?", (hashed_password, username))
+        conn.commit()
+        conn.close()
+
+        flash("Password has been reset successfully. You can now log in.")
+        return redirect(url_for('home'))
+
+    return render_template('reset_password.html', username=username)
 
 if __name__ == '__main__':
     app.run(debug=True)

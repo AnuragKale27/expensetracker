@@ -11,8 +11,8 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <img src="{{ url_for('static', filename='images/user-avatar.png') }}" alt="User Avatar">
-        <h2>{{ session['username'] }}</h2> <!-- Display the logged-in user's name -->
-        <p>Your Money</p>
+        <h2>{{ username }}</h2> <!-- Display the user's name -->
+
         <nav>
             <ul>
                 <li><a href="{{ url_for('dashboard') }}"><i class="icon-dashboard"></i> Dashboard</a></li>
@@ -42,16 +42,6 @@
                 <p>${{ total_balance }}</p>
             </div>
         </div>
-
-								  
-							 
-								  
-				
-																						   
-																			   
-																			 
-				 
-			  
 
         <h3>Recent Transactions</h3>
         <table>

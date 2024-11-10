@@ -163,3 +163,22 @@ footer {
     width: 100%;
     bottom: 0;
 }
+
+/* Styling for Logout Button */
+.logout-button {
+    display: block; /* Make sure the button is displayed as a block or inline element */
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #c0392b;
+}
+

@@ -61,6 +61,7 @@ def login():
 
         if user and check_password_hash(user['password'], password):
             session['user_id'] = user['id']
+            session['username'] = user['username'] 
             return redirect(url_for('dashboard'))
 
         return "Invalid credentials. Please try again."
@@ -73,6 +74,9 @@ def login():
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('home'))
+    
+    user_id = session['user_id']
+    username = session.get('username')  # Retrieve the username from the session
 
     conn = get_db_connection()
     transactions = conn.execute("SELECT * FROM transactions WHERE user_id = ? ORDER BY date DESC LIMIT 5", (session['user_id'],)).fetchall()
@@ -81,7 +85,7 @@ def dashboard():
     total_balance = total_income - total_expense
     conn.close()
 
-    return render_template('dashboard.html', transactions=transactions, total_income=total_income, total_expense=total_expense, total_balance=total_balance)
+    return render_template('dashboard.html',username=session.get('username', 'User'), transactions=transactions, total_income=total_income, total_expense=total_expense, total_balance=total_balance)
 
 
 

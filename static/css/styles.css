@@ -1,10 +1,13 @@
-/* General Layout Styling */
 body {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
-    overflow-x: hidden; /* Hide any horizontal overflow */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh; /* Full viewport height */
 }
 
 /* Fixed Header Styling */
@@ -185,7 +188,88 @@ footer {
     color: #ecf0f1;
     position: fixed;
     bottom: 0;
-    left: 250px; /* Align footer with the sidebar */
-    width: calc(100% - 250px); /* Adjust for the sidebar width */
+    left: 0px; /* Align footer with the sidebar */
+    width: calc(100%); /* Adjust for the sidebar width */
     z-index: 800;
+}
+
+
+/* Error and Info Message Styling */
+.message {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #e74c3c; /* Red color for error messages */
+    font-weight: bold;
+}
+
+/* Login Container Styling */
+.login-container {
+    max-width: 400px;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.login-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.login-container input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-container button:hover {
+    background-color: #2980b9;
+}
+
+.login-container .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.login-container .back-link:hover {
+    color: #2980b9;
 }

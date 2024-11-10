@@ -46,6 +46,13 @@ def login_required(view):
 def home():
     return render_template('login.html')
 
+
+@app.route('/logout')
+@nocache
+def logout():
+    session.clear()  # Clear all session data
+    return redirect(url_for('home'))  # Redirect to the login page
+
 # Signup Route
 @app.route('/signup', methods=['GET', 'POST'])
 @nocache
@@ -94,9 +101,7 @@ def login():
 @nocache
 @login_required
 def dashboard():
-    if 'user_id' not in session:
-        return redirect(url_for('home'))
-    
+
     user_id = session['user_id']
     username = session.get('username')  # Retrieve the username from the session
 

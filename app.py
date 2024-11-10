@@ -46,7 +46,7 @@ def signup():
             conn.close()
 
         return redirect(url_for('home'))
-    return render_template('signup.html')
+    return render_template('signup.html', show_sidebar=False)
 
 # Login Route
 @app.route('/login', methods=['GET', 'POST'])
@@ -65,7 +65,7 @@ def login():
             return redirect(url_for('dashboard'))
 
         return "Invalid credentials. Please try again."
-    return render_template('login.html')
+    return render_template('login.html', show_sidebar=False)
 
 # Dashboard Route
 @app.route('/dashboard')
@@ -85,7 +85,7 @@ def dashboard():
     total_balance = total_income - total_expense
     conn.close()
 
-    return render_template('dashboard.html',username=session.get('username', 'User'), transactions=transactions, total_income=total_income, total_expense=total_expense, total_balance=total_balance)
+    return render_template('dashboard.html',username=session.get('username', 'User'), transactions=transactions, total_income=total_income, total_expense=total_expense, total_balance=total_balance, show_sidebar=True)
 
 
 
@@ -150,16 +150,40 @@ def reset_password(username):
 
     return render_template('reset_password.html', username=username)
 
-@app.route('/view_transactions')
+@app.route('/view_transactions', methods=['GET'])
 def view_transactions():
     if 'user_id' not in session:
         return redirect(url_for('home'))
 
+    user_id = session['user_id']
+    year = request.args.get('year')
+    month = request.args.get('month')
+    transaction_type = request.args.get('type')
+
+    # Build the base SQL query
+    query = "SELECT * FROM transactions WHERE user_id = ?"
+    params = [user_id]
+
+    # Add conditions for year, month, and type if specified
+    if year:
+        query += " AND strftime('%Y', date) = ?"
+        params.append(year)
+    if month:
+        query += " AND strftime('%m', date) = ?"
+        params.append(month)
+    if transaction_type:
+        query += " AND type = ?"
+        params.append(transaction_type)
+
+    query += " ORDER BY date DESC"
+
+    # Execute the query with the parameters
     conn = get_db_connection()
-    transactions = conn.execute("SELECT * FROM transactions WHERE user_id = ? ORDER BY date DESC", (session['user_id'],)).fetchall()
+    transactions = conn.execute(query, params).fetchall()
     conn.close()
 
-    return render_template('view_transactions.html', transactions=transactions)
+    return render_template('view_transactions.html', transactions=transactions, show_sidebar=True)
+
 
 @app.route('/add_expense', methods=['GET', 'POST'])
 def add_expense():
@@ -169,20 +193,22 @@ def add_expense():
     if request.method == 'POST':
         amount = request.form['amount']
         category = request.form['category']
+        date = request.form['date']  # Get the date from the form
         description = request.form['description']
         user_id = session['user_id']
 
         # Insert the expense into the database
         conn = get_db_connection()
-        conn.execute("INSERT INTO transactions (user_id, type, category, amount, date, description) VALUES (?, 'expense', ?, ?, datetime('now'), ?)",
-                     (user_id, category, amount, description))
+        conn.execute("INSERT INTO transactions (user_id, type, category, amount, date, description) VALUES (?, 'expense', ?, ?, ?, ?)",
+                     (user_id, category, amount, date, description))
         conn.commit()
         conn.close()
 
         # Redirect to the dashboard or a success page
         return redirect(url_for('dashboard'))
 
-    return render_template('add_expense.html')
+    return render_template('add_expense.html', show_sidebar=True)
+
 
 @app.route('/add_income', methods=['GET', 'POST'])
 def add_income():
@@ -192,20 +218,22 @@ def add_income():
     if request.method == 'POST':
         amount = request.form['amount']
         category = request.form['category']
+        date = request.form['date']  # Get the date from the form
         description = request.form['description']
         user_id = session['user_id']
 
         # Insert the income into the database
         conn = get_db_connection()
-        conn.execute("INSERT INTO transactions (user_id, type, category, amount, date, description) VALUES (?, 'income', ?, ?, datetime('now'), ?)",
-                     (user_id, category, amount, description))
+        conn.execute("INSERT INTO transactions (user_id, type, category, amount, date, description) VALUES (?, 'income', ?, ?, ?, ?)",
+                     (user_id, category, amount, date, description))
         conn.commit()
         conn.close()
 
         # Redirect to the dashboard or a success page
         return redirect(url_for('dashboard'))
 
-    return render_template('add_income.html')
+    return render_template('add_income.html', show_sidebar=True)
+
 
 
 

@@ -8,7 +8,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <!-- Sidebar -->
+    <!-- Fixed Header -->
+    <header class="fixed-header">
+        <h1>Personal Expense Tracker</h1>
+    </header>
+    
+    <!-- Sidebar: Only show if 'show_sidebar' is True -->
+    {% if show_sidebar %}
     <div class="sidebar">
         <img src="{{ url_for('static', filename='images/user-avatar.png') }}" alt="User Avatar">
         <h2>{{ session.get('username', 'User') }}</h2>
@@ -37,9 +43,9 @@
                 </li>
             </ul>
         </nav>
-        <!-- Logout Button -->
         <a href="{{ url_for('home') }}" class="logout-button">Logout</a>
     </div>
+    {% endif %}
 
     <!-- Main Content -->
     <main>

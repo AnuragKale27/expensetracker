@@ -182,3 +182,13 @@ footer {
     background-color: #c0392b;
 }
 
+
+/* Active link styling */
+.sidebar nav ul li a.active {
+    background-color: #1abc9c;  /* Change to your desired highlight color */
+    color: white;               /* Text color when active */
+    font-weight: bold;          /* Make the text bold */
+    border-radius: 5px;         /* Add some border-radius for a smooth look */
+    padding: 10px;              /* Adjust padding if necessary */
+}
+

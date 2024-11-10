@@ -1,21 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Income</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
+{% extends "base.html" %}
+
+{% block title %}Add Income{% endblock %}
+
+{% block content %}
         <h2>Add Income</h2>
         <form action="{{ url_for('add_income') }}" method="POST">
             <label for="amount">Amount:</label>
@@ -30,9 +17,4 @@
             <input type="text" id="description" name="description">
             <button type="submit">Add Income</button>
         </form>
-    </main>
-    <footer>
-        <p>&copy; 2024 Expense Tracker</p>
-    </footer>
-</body>
-</html>
+{% endblock %}

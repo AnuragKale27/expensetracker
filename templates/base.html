@@ -4,26 +4,48 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>{% block title %}Expense Tracker{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <header>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <img src="{{ url_for('static', filename='images/user-avatar.png') }}" alt="User Avatar">
+        <h2>{{ session.get('username', 'User') }}</h2>
+
         <nav>
             <ul>
-                {% if 'user_id' in session %}
-                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                {% else %}
-                    <li><a href="{{ url_for('home') }}">Login</a></li>
-                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-                {% endif %}
+                <li>
+                    <a href="{{ url_for('dashboard') }}" class="{% if request.path == '/dashboard' %}active{% endif %}">
+                        <i class="icon-dashboard"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('view_transactions') }}" class="{% if request.path == '/view_transactions' %}active{% endif %}">
+                        <i class="icon-transactions"></i> View Transactions
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('add_income') }}" class="{% if request.path == '/add_income' %}active{% endif %}">
+                        <i class="icon-income"></i> Incomes
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('add_expense') }}" class="{% if request.path == '/add_expense' %}active{% endif %}">
+                        <i class="icon-expense"></i> Expenses
+                    </a>
+                </li>
             </ul>
         </nav>
-    </header>
+        <!-- Logout Button -->
+        <a href="{{ url_for('home') }}" class="logout-button">Logout</a>
+    </div>
+
+    <!-- Main Content -->
     <main>
         {% block content %}{% endblock %}
     </main>
+
     <footer>
         <p>&copy; 2024 Expense Tracker</p>
     </footer>

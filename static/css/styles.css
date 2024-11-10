@@ -1,84 +1,97 @@
-/* General Body Styling */
+/* General Layout Styling */
 body {
-    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
+    font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
-    color: #333;
-    display: flex;
+    overflow-x: hidden; /* Hide any horizontal overflow */
+}
+
+/* Fixed Header Styling */
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 24px;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fixed-header h1 {
+    margin: 0;
 }
 
 /* Sidebar Styling */
 .sidebar {
+    position: fixed;
+    top: 70px; /* Height of the fixed header */
+    left: 0;
     width: 250px;
+    height: calc(100% - 70px); /* Full height minus the header height */
     background-color: #2c3e50;
     color: #ecf0f1;
-    height: 100vh;
-    padding: 20px;
+    padding-top: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    overflow-y: auto; /* Add scrolling if the content overflows */
+    z-index: 900;
 }
 
 .sidebar img {
+    display: block;
+    margin: 0 auto;
     border-radius: 50%;
     width: 80px;
     height: 80px;
-    margin-bottom: 15px;
 }
 
 .sidebar h2 {
-    font-size: 1.5em;
-    margin: 10px 0;
-    color: #ecf0f1;
-}
-
-.sidebar p {
-    font-size: 0.9em;
-    color: #bdc3c7;
-    margin-bottom: 20px;
+    text-align: center;
+    font-size: 20px;
+    margin-top: 10px;
 }
 
 .sidebar nav ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
-    width: 100%;
+    margin: 0;
 }
 
 .sidebar nav ul li {
-    margin: 15px 0;
+    padding: 10px 20px;
 }
 
 .sidebar nav ul li a {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
     color: #ecf0f1;
-    font-size: 1em;
-    padding: 10px 15px;
-    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
     transition: background-color 0.3s;
 }
 
-.sidebar nav ul li a:hover {
-    background-color: #34495e;
-}
-
-.sidebar nav ul li a i {
-    margin-right: 10px;
-    font-size: 1.2em;
+.sidebar nav ul li a:hover,
+.sidebar nav ul li a.active {
+    background-color: #1abc9c;
+    border-radius: 4px;
 }
 
 /* Logout Button Styling */
 .logout-button {
-    margin-top: auto;
-    padding: 10px 20px;
+    display: block;
+    width: calc(100% - 40px);
+    margin: 20px auto;
+    padding: 10px;
     background-color: #e74c3c;
-    color: #fff;
+    color: #ffffff;
     text-decoration: none;
-    border-radius: 5px;
+    text-align: center;
     font-weight: bold;
+    border-radius: 5px;
     transition: background-color 0.3s;
 }
 
@@ -86,18 +99,21 @@ body {
     background-color: #c0392b;
 }
 
-
 /* Main Content Styling */
 main {
-    flex-grow: 1;
+    margin-left: 120px; /* Align content flush with the sidebar */
+    margin-top: 30px; /* Space for the fixed header */
     padding: 20px;
+    overflow: visible; /* Remove the scrollbar */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
 }
 
 /* Dashboard Overview Styling */
 .overview {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between; /* Space between boxes */
     margin-bottom: 30px;
+    gap: 10px; /* Add space between the boxes */
 }
 
 .box {
@@ -107,7 +123,7 @@ main {
     padding: 20px;
     text-align: center;
     transition: transform 0.3s, box-shadow 0.3s;
-    width: 30%;
+    flex: 1; /* Make boxes flexible */
 }
 
 .box h3 {
@@ -129,11 +145,17 @@ main {
 }
 
 /* Table Styling */
+.table-container {
+    max-height: 400px;
+    overflow-y: auto; /* Scroll if content overflows */
+    border: 1px solid #ddd;
+    margin-top: 20px;
+	margin-left: 120px;				   
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 th, td {
@@ -145,7 +167,9 @@ th, td {
 th {
     background-color: #2c3e50;
     color: #ecf0f1;
-    font-weight: bold;
+    position: sticky; /* Make the header sticky */
+    top: 0;
+    z-index: 1;
 }
 
 tr:hover {
@@ -160,310 +184,8 @@ footer {
     background-color: #2c3e50;
     color: #ecf0f1;
     position: fixed;
-    width: 100%;
     bottom: 0;
-}
-
-/* Styling for Logout Button */
-.logout-button {
-    display: block; /* Make sure the button is displayed as a block or inline element */
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #e74c3c;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    text-align: center;
-    transition: background-color 0.3s;
-}
-
-.logout-button:hover {
-    background-color: #c0392b;
-}
-
-
-/* Active link styling */
-.sidebar nav ul li a.active {
-    background-color: #1abc9c;  /* Change to your desired highlight color */
-    color: white;               /* Text color when active */
-    font-weight: bold;          /* Make the text bold */
-    border-radius: 5px;         /* Add some border-radius for a smooth look */
-    padding: 10px;              /* Adjust padding if necessary */
-}
-
-/* CSS to make the table scrollable */
-.table-container {
-    max-height: 400px; /* Set the maximum height for the table */
-    overflow-y: auto; /* Enable vertical scrolling */
-    border: 1px solid #ddd; /* Add a border around the table */
-}
-
-table {
-    width: 100%; /* Make the table take up the full width */
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #2c3e50;
-    color: #ecf0f1;
-    position: sticky; /* Make the header sticky */
-    top: 0; /* Position the header at the top */
-    z-index: 1; /* Ensure the header stays above the table content */
-}
-
-tr:hover {
-    background-color: #f2f2f2;
-    transition: background-color 0.3s;
-}
-
-/* Signup Page Styling */
-.signup-container {
-    max-width: 450px;
-    margin: 50px auto; /* Centers the form vertically and horizontally */
-    padding: 25px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-.signup-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 26px;
-    color: #2c3e50;
-    font-weight: bold;
-}
-
-.signup-container label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #34495e;
-}
-
-.signup-container input,
-.signup-container select {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    transition: border-color 0.3s;
-}
-
-.signup-container input:focus,
-.signup-container select:focus {
-    border-color: #3498db; /* Highlight border color on focus */
-    outline: none;
-}
-
-.signup-container button {
-    width: 100%;
-    padding: 12px;
-    background-color: #3498db;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.signup-container button:hover {
-    background-color: #2980b9; /* Darker blue on hover */
-}
-
-.signup-container .back-link {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
-    color: #3498db;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-.signup-container .back-link:hover {
-    color: #2980b9; /* Darker blue on hover */
-}
-
-/* Security Question Page Styling */
-.security-question-container {
-    max-width: 450px;
-    margin: 50px auto;
-    padding: 25px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-.security-question-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 26px;
-    color: #2c3e50;
-    font-weight: bold;
-}
-
-.security-question-container label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #34495e;
-}
-
-.security-question-container select,
-.security-question-container input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    transition: border-color 0.3s;
-}
-
-.security-question-container input:focus,
-.security-question-container select:focus {
-    border-color: #3498db; /* Highlight border color on focus */
-    outline: none;
-}
-
-.security-question-container button {
-    width: 100%;
-    padding: 12px;
-    background-color: #3498db;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.security-question-container button:hover {
-    background-color: #2980b9; /* Darker blue on hover */
-}
-
-.security-question-container .back-link {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
-    color: #3498db;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-.security-question-container .back-link:hover {
-    color: #2980b9; /* Darker blue on hover */
-}
-
-/* Login Page Styling (Reuse the container style for consistency) */
-.login-container {
-    max-width: 450px;
-    margin: 50px auto;
-    padding: 25px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-.login-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 26px;
-    color: #2c3e50;
-    font-weight: bold;
-}
-
-.login-container label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #34495e;
-}
-
-.login-container input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    transition: border-color 0.3s;
-}
-
-.login-container input:focus {
-    border-color: #3498db; /* Highlight border color on focus */
-    outline: none;
-}
-
-.login-container button {
-    width: 100%;
-    padding: 12px;
-    background-color: #3498db;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.login-container button:hover {
-    background-color: #2980b9; /* Darker blue on hover */
-}
-
-.login-container .back-link {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
-    color: #3498db;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-.login-container .back-link:hover {
-    color: #2980b9; /* Darker blue on hover */
-}
-
-/* Fixed Header Styling */
-.fixed-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #2c3e50; /* Dark background for a professional look */
-    color: #ecf0f1; /* Light text color for contrast */
-    text-align: center;
-    padding: 15px 0;
-    font-size: 24px;
-    font-weight: bold;
-    z-index: 1000; /* Keeps the header on top of other elements */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    border-bottom: 2px solid #1abc9c; /* Optional: accent border for style */
-}
-
-.fixed-header h1 {
-    margin: 0;
-    font-family: 'Arial', sans-serif; /* You can change the font to match your theme */
-    letter-spacing: 1px; /* Slight spacing for readability */
-}
-
-/* Adjustment for content to not be hidden under the header */
-main {
-    margin-top: 70px; /* Adjust the value based on your header's height */
+    left: 250px; /* Align footer with the sidebar */
+    width: calc(100% - 250px); /* Adjust for the sidebar width */
+    z-index: 800;
 }

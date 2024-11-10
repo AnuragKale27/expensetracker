@@ -3,10 +3,10 @@
 {% block title %}View Transactions{% endblock %}
 
 {% block content %}
-<h2>View Transactions</h2>
+<h2 style="margin-left: 120px;">View Transactions</h2>
 
 <!-- Filter Form -->
-<form method="GET" action="{{ url_for('view_transactions') }}">
+<form method="GET" action="{{ url_for('view_transactions') }}" style="margin-left: 120px;">
     <label for="year">Year:</label>
     <select id="year" name="year">
         <option value="">All</option>

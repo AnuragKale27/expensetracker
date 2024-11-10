@@ -3,7 +3,7 @@
 {% block title %}Security Question{% endblock %}
 
 {% block content %}
-<div class="security-question-container">
+<div class="form-container">
     <h2>Security Question</h2>
     <form action="{{ url_for('security_question', username=username) }}" method="POST">
         <label for="security_question">Security Question:</label>

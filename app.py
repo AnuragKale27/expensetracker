@@ -5,9 +5,7 @@ from datetime import datetime
 from flask import Response
 import csv
 
-
 from functools import wraps
-
 from flask import make_response
 
 app = Flask(__name__)
@@ -21,13 +19,36 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+
+
+def nocache(view):
+    @wraps(view)
+    def no_cache(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, public, max-age=0"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+        return response
+    return no_cache
+
+def login_required(view):
+    @wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if 'user_id' not in session:
+            # Redirect to the login page if the user is not logged in
+            return redirect(url_for('home'))
+        return view(*args, **kwargs)
+    return wrapped_view
+
 # Home/Login Route
 @app.route('/')
+@nocache
 def home():
     return render_template('login.html')
 
 # Signup Route
 @app.route('/signup', methods=['GET', 'POST'])
+@nocache
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -50,6 +71,7 @@ def signup():
 
 # Login Route
 @app.route('/login', methods=['GET', 'POST'])
+@nocache
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -69,8 +91,8 @@ def login():
 
 # Dashboard Route
 @app.route('/dashboard')
-
-
+@nocache
+@login_required
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('home'))
@@ -92,6 +114,7 @@ def dashboard():
 
     # Forgot Password Route
 @app.route('/forgot_password', methods=['GET', 'POST'])
+@nocache
 def forgot_password():
     if request.method == 'POST':
         username = request.form['username']
@@ -111,6 +134,7 @@ def forgot_password():
 
 # Security Question Route
 @app.route('/security_question/<username>', methods=['GET', 'POST'])
+@nocache
 def security_question(username):
     conn = get_db_connection()
     user = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
@@ -135,6 +159,8 @@ def security_question(username):
 
 # Reset Password Route
 @app.route('/reset_password/<username>', methods=['GET', 'POST'])
+@nocache
+@login_required
 def reset_password(username):
     if request.method == 'POST':
         new_password = request.form['new_password']
@@ -151,6 +177,8 @@ def reset_password(username):
     return render_template('reset_password.html', username=username)
 
 @app.route('/view_transactions', methods=['GET'])
+@nocache
+@login_required
 def view_transactions():
     if 'user_id' not in session:
         return redirect(url_for('home'))
@@ -186,6 +214,8 @@ def view_transactions():
 
 
 @app.route('/add_expense', methods=['GET', 'POST'])
+@nocache
+@login_required
 def add_expense():
     if 'user_id' not in session:
         return redirect(url_for('home'))
@@ -211,6 +241,8 @@ def add_expense():
 
 
 @app.route('/add_income', methods=['GET', 'POST'])
+@nocache
+@login_required
 def add_income():
     if 'user_id' not in session:
         return redirect(url_for('home'))
